@@ -1,0 +1,249 @@
+FORMAT: 1A
+HOST: http://chat.chewam.com/
+
+# NaNChat
+NaNChat is a simple API allowing consumers to exchange messages.
+
+# Group Non Authenticated User
+Non authenticated user functionalities of the **NaNChat API**
+
+## Subscription [/api/subscribe]
+
+### Subscribe [POST]
++ Request (application/json)
+    + Body
+
+            {
+                "email": "user@nowhere.com",
+                "password": "tartiflette"
+            }
+
++ Response 201 (application/json)
+
+        {
+            "success": true
+        }
+
++ Response 403 (text/plain)
+
+## Check User Email [/api/emailcheck/{hash}]
++ Parameters
+    + hash (string) - verification hash
+
+### Check email [GET]
+
++ Response 201 (application/json)
+
+        {
+            "success": true
+        }
+
++ Response 403 (text/plain)
+
+## Authentication [/api/authentication]
+
+### Login [POST]
++ Request (application/json)
+    + Body
+
+            {
+                "login": "toto",
+                "password": "tartiflette"
+            }
+
++ Response 201 (application/json)
+
+        {
+            "success": true
+        }
+
++ Response 403 (text/plain)
+
+### Logout [GET]
+
++ Response 204 (application/json)
+
+## Lost Password [/api/lostpassword]
+
+### Get Verification Email [POST]
++ Request (application/json)
+    + Body
+
+            {
+                "email": "user@nowhere.com"
+            }
+
++ Response 201 (application/json)
+
+        {
+            "success": true
+        }
+
++ Response 403 (text/plain)
+
+### Reset Password [PUT]
++ Request (application/json)
+    + Body
+
+            {
+                "password": "MyN3wP4zzw0rd",
+                "hash": "unhashmd5defolie!"
+            }
+
++ Response 201 (application/json)
+
+        {
+            "success": true
+        }
+
++ Response 403 (text/plain)
+
+# Group Authenticated User
+Authenticated user functionalities of the **NaNChat API**
+
+## Search [/api/search]
+
+### Look for contacts [GET]
++ Request (application/json)
+    + Body
+
+            {
+                "query": "john"
+            }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 100,
+                "name": "John Doe"
+            },
+            {
+                "id": 101,
+                "name": "Johnny Begood"
+            }
+        ]
+
+## Contacts [/api/contacts]
+
+### List All Contacts [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 100,
+                "name": "John Doe",
+                "devices": [
+                    {
+                        "id": 42,
+                        "name": "iPhone",
+                        "key": "key de ouf 1"
+                    }, {
+                        "id": 43,
+                        "name": "Desktop",
+                        "key": "key de ouf 2"
+                    }
+                ]
+            },
+            {
+                "id": 101,
+                "name": "Sacha Bolton",
+                "devices": [
+                    {
+                        "id": 92,
+                        "name": "Galaxy",
+                        "key": "key de ouf 3"
+                    }, {
+                        "id": 93,
+                        "name": "Office",
+                        "key": "key de ouf 4"
+                    }
+                ]
+            }
+        ]
+
+### Add a New Contact [POST]
++ Request (application/json)
+    + Body
+
+            {
+                "userId": 94
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /contacts/94
+
+    + Body
+
+            {
+                "success": true
+            }
+
+### Remove New Contact [DELETE]
++ Request (application/json)
+    + Body
+
+            {
+                "userId": 94
+            }
+
++ Response 204 (application/json)
+
+## Contact Messages [/api/contacts/{user_id}/messages]
+
++ Parameters
+    + user_id (number) - ID of the contact
+
+### List All Contact Messages [GET]
++ Request (application/json)
+    + Body
+
+            {
+                "deviceId": 13
+            }
+
++ Response 200 (application/json)
+
+        [
+            {
+                "text": "Un message de ouf avec des infos de dingue!",
+                "creation_date": "2015-12-20 13:42:07"
+            },
+            {
+                "text": "Une reponse de ouf au message de dingue!",
+                "creation_date": "2015-12-20 13:43:21"
+            }
+        ]
+
+### Send a Message to Contact [POST]
++ Request (application/json)
+    + Body
+
+            {
+                "from": [
+                    {
+                        "deviceId": 13,
+                        text: "Un message de ouf avec des infos de dingue!"
+                    }
+                ],
+                "to": [
+                    {
+                        "deviceId": 42,
+                        text: "Un message de ouf avec des infos de dingue!"
+                    },
+                    {
+                        "deviceId": 43,
+                        text: "Un message de ouf avec des infos de dingue!"
+                    }
+                ]
+            }
+
++ Response 201 (application/json)
+
+        {
+            "success": true
+        }
